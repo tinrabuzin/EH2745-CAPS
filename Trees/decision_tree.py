@@ -33,11 +33,6 @@ class BasicTree:
         :param feature: Feature index in the data
         :return gain: Calculated gain for selecting a certain feature
         """
-
-        data = self.data
-        classes = self.classes
-        feature = 1
-
         gain = 0
         n_data = len(data)
 
@@ -96,15 +91,14 @@ class BasicTree:
             if new_classes.count(aclass) == 0:
                 new_classes.append(aclass)
 
-        frequency = np.zeros(len(new_classes))
+        # Calculate total entropy
+
         total_entropy = 0
 
-        # Calculate gains
+        for aclass in new_classes:
+            total_entropy += self.calc_entropy(float(classes.count(aclass))/float(number_of_data))
 
-        for class_index, aclass in enumerate(new_classes):
-            frequency[class_index] = classes.count(aclass)
-            total_entropy += self.calc_entropy(float(frequency[index]/len(data[0])))
-        gain = np.zeros(number_of_features)
+        # Check if we came to an end
 
         if number_of_data == 0 or number_of_features == 0:
             return 0
@@ -114,6 +108,7 @@ class BasicTree:
 
             # Find the feature with the greatest information gain
 
+            gain = np.zeros(number_of_features)
             for feature_index in range(number_of_features):
                 g = self.calc_info_gain(data, classes, feature_index)
                 gain[feature_index] = total_entropy - g
@@ -138,7 +133,7 @@ class BasicTree:
                 for data_index, datapoint in enumerate(data):
                     if datapoint[best_feature_index] == value:
                         datapoint.pop(best_feature_index)
-                        new_feature_names = feature_names
+                        new_feature_names = list(feature_names)
                         new_feature_names.pop(best_feature_index)
                         new_data.append(datapoint)
                         new_classes.append(classes[data_index])
