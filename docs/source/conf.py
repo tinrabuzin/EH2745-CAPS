@@ -20,7 +20,7 @@ import os
 import sys
 from recommonmark.parser import CommonMarkParser
 
-sys.path.insert(0, '/Users/tinrabuzin/dev/EH2745-CAPS/')#os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 # -- General configuration ------------------------------------------------
