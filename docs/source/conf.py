@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # EH2745-CAPS documentation build configuration file, created by
-# sphinx-quickstart on Fri Mar 24 13:54:56 2017.
+# sphinx-quickstart on Fri Mar 24 16:51:04 2017.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -18,11 +18,9 @@
 #
 import os
 import sys
-from recommonmark.parser import CommonMarkParser
+sys.path.insert(0, os.path.abspath('../../'))
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-
-
+print sys.path
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -32,10 +30,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-
 extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
-    'sphinx.ext.imgmath',
+    'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages']
@@ -43,16 +40,11 @@ extensions = ['sphinx.ext.autodoc',
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-source_parsers = {
-   '.md': CommonMarkParser,
-}
-
-source_suffix = ['.rst','.md']
-#source_suffix = '.rst'
+# source_suffix = ['.rst', '.md']
+source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
@@ -95,7 +87,7 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'classic'
+html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
