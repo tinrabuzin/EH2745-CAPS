@@ -5,12 +5,10 @@ class BasicTree:
 
     def __init__(self):
         """
-        Constructor
+        Constructor of the basic decisiont tree
+
         :return:
         """
-        self.data = [['Urgent', 'Yes', 'Yes'], ['Urgent', 'No', 'Yes'], ['Near', 'Yes', 'Yes'], ['None', 'Yes', 'No'], ['None', 'No', 'Yes'], ['None', 'Yes', 'No'], ['Near', 'No', 'No'], ['Near', 'No', 'Yes'], ['Near', 'Yes', 'Yes'], ['Urgent', 'No', 'No']]
-        self.classes = ['Party', 'Study', 'Party', 'Party', 'Pub', 'Party', 'Study', 'TV', 'Party', 'Study']
-        self.features = ['Deadline', 'Party', 'Lazy']
 
     def read_data(self, file_name):
         fid = open(file_name, 'r')
@@ -33,9 +31,13 @@ class BasicTree:
     @staticmethod
     def calc_entropy(p):
         """
-        Calculates the entropy from provided probability
+        Calculates entropy from the provided probability
+
+        .. math::
+            -p \ \mathrm{log}_2(p)
+
         :param p: Probability of the feature value
-        :return: Returns the calculated entropy
+        :return H: Returns the calculated entropy :math:`\\mathrm{H}(s)`
         """
         if p != 0:
             return -p*np.log2(p)
@@ -44,7 +46,12 @@ class BasicTree:
 
     def calc_info(self, data, classes):
         """
-        Calculates amount of information
+        Calculates weighted entropy of a dataset:
+
+        .. math::
+            \\sum_{f \in F} \\frac{\\lvert S_f \\rvert }{\\lvert S \\rvert } \\mathrm{H}(s)
+
+
         :param data:
         :param classes:
         :return:
@@ -129,6 +136,7 @@ class BasicTree:
     def calc_info_gain(self, data, classes, feature):
         """
         Calculates the information gain
+
         :param self:
         :param data: Dataset used to construct the tree
         :param classes: Classes that the data takes
@@ -181,6 +189,7 @@ class BasicTree:
     def split_data_cont(self, data, classes, threshold, feature):
         """
         Splits the dataset according to the provided threshold
+
         :param data:
         :param classes:
         :param threshold:
@@ -206,6 +215,7 @@ class BasicTree:
     def make_tree(self, data, classes, feature_names, feature_types):
         """
         Creates a tree dictionary from the dataset
+
         :param data: Dataset used to construct the tree
         :param classes: Classes that the data takes
         :param feature_names: Names of the features which are observed
@@ -311,6 +321,7 @@ class BasicTree:
     def print_tree(self, tree, ind=""):
         """
         Prints the decision tree
+
         :param tree: The tree dictionary
         :param ind: Optional parameter used to make indentation in the printout
         :return:
@@ -325,6 +336,7 @@ class BasicTree:
     def classify(self, tree, datapoint, feature_names):
         """
         Classifies the data point using the decision tree
+
         :param tree: Dictionary of a decision tree
         :param datapoint: Data point to be classified
         :param feature_names: Feature names of the data
