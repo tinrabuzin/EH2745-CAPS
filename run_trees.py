@@ -1,16 +1,29 @@
-import Trees
+import ml_algorithms
+import matplotlib.pyplot as plt
+import random
 
-x = Trees.decision_tree.BasicTree()
+tree = ml_algorithms.dtree.BasicTree()
 
-data, classes, feature_names =  x.read_data('/Users/tinrabuzin/dev/EH2745-CAPS/Trees/dtree_dataset.csv')
-
-data = [[10,10], [30,40], [60,70], [80,90],[20,80],[30,70],[70,10],[90,20]]
-classes = [1, 1, 0, 0,1,1,0,0]
+data, classes, feature_names = tree.read_data('/Users/tinrabuzin/dev/EH2745-CAPS/datasets/dataset.csv')
 
 
-tree = x.make_tree_cont(data, classes, ['feature1','feature2'])
 
-x.print_tree(tree)
+#data = [[10,10], [30,40], [60,70], [80,90],[20,80],[30,70],[70,10],[90,20]]
+#classes = [1, 1, 1, 1,0,0,0,0]
+
+data, classes = zip(*random.sample(list(zip(data,classes)),int(0.6*len(data))))
+
+#x = [point[0] for point in data]
+#y = [point[1] for point in data]
+
+#plt.scatter(x, y, s=20, c = classes)
+#plt.gray()
+#plt.draw()
+
+made_tree = tree.make_tree(data, classes, feature_names, ['Numerical','Numerical'])
+
+tree.print_tree(made_tree)
+#plt.show()
 #p = x.calc_entropy(3)
 #tree = x.make_tree(x.data, x.classes, x.features)
 #x.print_tree(tree)
