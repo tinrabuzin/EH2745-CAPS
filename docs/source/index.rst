@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-EH2745-CAPS documentation
+EH2745-CAPS's documentation
 =======================================
 
 This is the documentation of the machine learning code for the course EH2745 - Computer Applications in Power Systems.
