@@ -18,9 +18,12 @@ class Data():
 
     def read_data(self, file_name):
         """
-        Reads the data from a *.csv file
+        Reads the data from a *.csv file and stores it in the data objects. Also, returns the read information.
 
         :param file_name: Path to the dataset
+        :return data: The data read from a file (values of the attributes)
+        :return classes: The classes that each of the examples takes
+        :return feature_names: Names of the attributes describing examples
         """
 
         fid = open(file_name, 'r')
@@ -39,4 +42,6 @@ class Data():
                     self.classes.append(0)
 
         fid.close()
+
+        return self.data, self.classes, self.feature_names
 

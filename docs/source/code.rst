@@ -9,3 +9,9 @@ Auto Generated Documentation
     :undoc-members:
     :inherited-members:
     :show-inheritance:
+
+  .. autoclass:: Data
+    :members:
+    :undoc-members:
+    :inherited-members:
+    :show-inheritance:
