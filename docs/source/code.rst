@@ -1,7 +1,7 @@
 Auto Generated Documentation
 ============================
 
-  .. automodule:: ml_algorithms.dtree
+  .. automodule:: ml_algorithms
     :members:
 
   .. autoclass:: BasicTree
