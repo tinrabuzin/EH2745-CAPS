@@ -1,2 +1,2 @@
-from ml_algorithms import dtree
-from ml_algorithms import data
+from dtree import BasicTree
+from data import Data
