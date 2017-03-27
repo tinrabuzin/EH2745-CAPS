@@ -5,28 +5,10 @@ class BasicTree:
 
     def __init__(self):
         """
-        Constructor of the basic decisiont tree
+        Constructor of the basic decision tree
 
         :return:
         """
-
-    def read_data(self, file_name):
-        fid = open(file_name, 'r')
-        data = []
-        classes = []
-        feature_names = []
-        for line_index, line in enumerate(fid.readlines()):
-            line = line.strip()
-            if line_index == 0:
-                feature_names = line.split(',')[:-1]
-            else:
-                data.append(map(float, line.split(',')[:-1]))
-                if float(line.split(',')[-1]) > 0:
-                    classes.append(1)
-                else:
-                    classes.append(0)
-        return data, classes, feature_names
-
 
     @staticmethod
     def calc_entropy(p):
