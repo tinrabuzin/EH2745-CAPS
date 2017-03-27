@@ -1,10 +1,10 @@
 Auto Generated Documentation
 ============================
 
-  .. automodule:: test_file
+  .. automodule:: ml_algorithms
     :members:
 
-  .. autoclass:: test_file.Mana
+  .. autoclass:: BasicTree
     :members:
     :undoc-members:
     :inherited-members:
