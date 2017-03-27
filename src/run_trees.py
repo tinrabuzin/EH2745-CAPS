@@ -2,7 +2,7 @@ import ml_algorithms
 import matplotlib.pyplot as plt
 import random
 
-tree = ml_algorithms.dtree.BasicTree()
+tree = ml_algorithms.BasicTree()
 
 #data, classes, feature_names = tree.read_data('/Users/tinrabuzin/dev/EH2745-CAPS/datasets/dataset.csv')
 
