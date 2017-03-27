@@ -10,7 +10,7 @@ Welcome to EH2745-CAPS's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+code
 
 Indices and tables
 ==================
