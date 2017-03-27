@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # EH2745-CAPS documentation build configuration file, created by
-# sphinx-quickstart on Fri Mar 24 16:51:04 2017.
+# sphinx-quickstart on Mon Mar 27 13:02:01 2017.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -20,7 +20,6 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../../src'))
 
-print sys.path
 
 # -- General configuration ------------------------------------------------
 
@@ -32,6 +31,7 @@ print sys.path
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
@@ -88,7 +88,7 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'classic'
+html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -99,7 +99,7 @@ html_theme = 'classic'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = []
+html_static_path = ['_static']
 
 
 # -- Options for HTMLHelp output ------------------------------------------

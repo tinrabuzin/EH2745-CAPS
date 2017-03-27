@@ -1,5 +1,5 @@
 .. EH2745-CAPS documentation master file, created by
-   sphinx-quickstart on Fri Mar 24 16:51:04 2017.
+   sphinx-quickstart on Mon Mar 27 13:02:01 2017.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -10,7 +10,7 @@ Welcome to EH2745-CAPS's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   code
+
 
 Indices and tables
 ==================
