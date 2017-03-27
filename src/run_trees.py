@@ -2,34 +2,37 @@ import ml_algorithms
 import matplotlib.pyplot as plt
 import random
 
-data = ml_algorithms.Data()
-data.read_data('/Users/tinrabuzin/dev/EH2745-CAPS/src/datasets/dataset.csv')
 
-print data.feature_names
+if True:
+    data = ml_algorithms.Data()
+    data.read_data('/Users/tinrabuzin/dev/EH2745-CAPS/src/datasets/dataset.csv')
+    data.feature_types = ['Numeric', 'Numeric']
+    dataset, classes = zip(*random.sample(list(zip(data.dataset, data.classes)), int(0.6*len(data.dataset))))
 
-#tree = ml_algorithms.BasicTree()
+    #x = [point[0] for point in dataset]
+    #y = [point[1] for point in dataset]
+    #plt.scatter(x, y, s=20, c = classes)
+    #plt.gray()
+    #plt.draw()
+    #plt.show()
+
+    tree = ml_algorithms.BasicTree()
+    made_tree = tree.make_tree(data)
+    tree.print_tree(made_tree)
+
+else:
 
 
 
 
-#data = [[10,10], [30,40], [60,70], [80,90],[20,80],[30,70],[70,10],[90,20]]
-#classes = [1, 1, 1, 1,0,0,0,0]
-#feature_names = ['f1', 'f2']
 
-data, classes = zip(*random.sample(list(zip(data,classes)),int(0.6*len(data))))
+    dataset = [[10,10], [30,40], [60,70], [80,90],[20,80],[30,70],[70,10],[90,20]]
+    classes = [1, 1, 1, 1,0,0,0,0]
+    feature_names = ['f1', 'f2']
 
-#x = [point[0] for point in data]
-#y = [point[1] for point in data]
+    dtree = ml_algorithms.BasicTree()
+    data = ml_algorithms.Data(dataset, classes, feature_names, ['NotNumeric', 'NotNumeric'] )
 
-#plt.scatter(x, y, s=20, c = classes)
-#plt.gray()
-#plt.draw()
+    constructed_tree = dtree.make_tree(dataset, classes, feature_names, ['NotNumeric', 'NotNumeric'] )
 
-made_tree = tree.make_tree(data, classes, feature_names, ['Numerical','Numerical'])
-
-tree.print_tree(made_tree)
-#plt.show()
-#p = x.calc_entropy(3)
-#tree = x.make_tree(x.data, x.classes, x.features)
-#x.print_tree(tree)
-#print x.classify(tree, ['Urgent', 'No', 'Yes'], ['Deadline', 'Party', 'Lazy'])
+    dtree.print_tree(constructed_tree)
