@@ -18,8 +18,9 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.dirname(os.path.abspath('..')))
+sys.path.insert(0, os.path.abspath('../src'))
 
+print sys.path
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -86,7 +87,7 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'classic'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
