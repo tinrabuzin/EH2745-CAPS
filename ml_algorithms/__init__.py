@@ -1,1 +1,1 @@
-from ml_algorithms import *
+from ml_algorithms import dtree

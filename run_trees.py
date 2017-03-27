@@ -4,14 +4,15 @@ import random
 
 tree = ml_algorithms.dtree.BasicTree()
 
-data, classes, feature_names = tree.read_data('/Users/tinrabuzin/dev/EH2745-CAPS/datasets/dataset.csv')
+#data, classes, feature_names = tree.read_data('/Users/tinrabuzin/dev/EH2745-CAPS/datasets/dataset.csv')
 
 
 
-#data = [[10,10], [30,40], [60,70], [80,90],[20,80],[30,70],[70,10],[90,20]]
-#classes = [1, 1, 1, 1,0,0,0,0]
+data = [[10,10], [30,40], [60,70], [80,90],[20,80],[30,70],[70,10],[90,20]]
+classes = [1, 1, 1, 1,0,0,0,0]
+feature_names = ['f1', 'f2']
 
-data, classes = zip(*random.sample(list(zip(data,classes)),int(0.6*len(data))))
+#data, classes = zip(*random.sample(list(zip(data,classes)),int(0.6*len(data))))
 
 #x = [point[0] for point in data]
 #y = [point[1] for point in data]
