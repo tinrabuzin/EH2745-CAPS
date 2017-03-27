@@ -17,12 +17,10 @@ if True:
     #plt.show()
 
     tree = ml_algorithms.BasicTree()
-    made_tree = tree.make_tree(data)
+    made_tree = tree.make_tree(dataset, classes, data.feature_names, data.feature_types)
     tree.print_tree(made_tree)
 
 else:
-
-
 
 
 
