@@ -4,10 +4,11 @@ import random
 
 
 if True:
-    data = ml_algorithms.Data()
-    data.read_data('/Users/tinrabuzin/dev/EH2745-CAPS/src/datasets/dataset.csv')
-    data.feature_types = ['Numeric', 'Numeric']
-    dataset, classes = zip(*random.sample(list(zip(data.dataset, data.classes)), int(0.6*len(data.dataset))))
+    tree = ml_algorithms.BasicTree()
+    data, classes, feature_names = tree.read_data('/Users/tinrabuzin/dev/EH2745-CAPS/src/datasets/dataset.csv')
+    feature_types = ['Numeric', 'Numeric']
+
+    training_data, training_classes, test_data, test_classes = tree.create_training_test_sets(data, classes, 0.6)
 
     #x = [point[0] for point in dataset]
     #y = [point[1] for point in dataset]
@@ -16,9 +17,11 @@ if True:
     #plt.draw()
     #plt.show()
 
-    tree = ml_algorithms.BasicTree()
-    made_tree = tree.make_tree(dataset, classes, data.feature_names, data.feature_types)
+    made_tree = tree.make_tree(training_data, training_classes, feature_names, feature_types)
     tree.print_tree(made_tree)
+    perc = tree.tree_test(made_tree, test_data, test_classes, feature_names)
+    print perc
+
 
 else:
 

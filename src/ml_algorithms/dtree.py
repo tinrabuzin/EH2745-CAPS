@@ -1,4 +1,6 @@
 import numpy as np
+import random
+from collections import Counter
 
 
 class BasicTree:
@@ -9,6 +11,69 @@ class BasicTree:
 
         :return:
         """
+
+    @staticmethod
+    def read_data(file_name):
+        """
+        Reads the data from a *.csv file and stores it in the data objects. Also, returns the read information.
+
+        :param file_name: Path to the dataset
+        :returns data: The data read from a file (values of the attributes)
+        :returns classes: The classes that each of the examples takes
+        :returns feature_names: Names of the attributes describing examples
+        """
+
+        fid = open(file_name, 'r')
+        data = []
+        classes = []
+        feature_names = []
+        for line_index, line in enumerate(fid.readlines()):
+            line = line.strip()
+            if line_index == 0:
+                feature_names = line.split(',')[:-1]
+            else:
+                data.append(map(float, line.split(',')[:-1]))
+                if float(line.split(',')[-1]) > 0:
+                    classes.append(1)
+                else:
+                    classes.append(0)
+
+        fid.close()
+
+        return data, classes, feature_names
+
+    @staticmethod
+    def create_training_test_sets(data, classes, percentage):
+        """
+        Splits the data set into training and test sets
+
+        :param data:
+        :param classes:
+        :return:
+        """
+
+        training_indices = random.sample(range(len(data)), int(percentage*len(data)))
+        test_indices = []
+        for index in range(len(data)):
+            if training_indices.count(index) == 0:
+                test_indices.append(index)
+
+        training_data = []
+        training_classes = []
+        test_data = []
+        test_classes = []
+
+        for index in training_indices:
+            training_data.append(data[index])
+            training_classes.append(classes[index])
+
+        for index in test_indices:
+            test_data.append(data[index])
+            test_classes.append(classes[index])
+
+
+
+        return training_data, training_classes, test_data, test_classes
 
     @staticmethod
     def calc_entropy(p):
@@ -57,6 +122,9 @@ class BasicTree:
         """
         Calculates the information gain for all of the thresholds
 
+        :param data: Dataset used to construct the tree
+        :param classes: Classes that the data takes
+        :param feature: The feature for which the information gain is calculated
         """
         n_data = len(data)
 
@@ -66,7 +134,6 @@ class BasicTree:
             feature_column.append(datapoint[feature])
         if len(set(feature_column)) == 1:
             return [-1], [-1]
-
 
         # Extract unique values of feature
 
@@ -85,27 +152,21 @@ class BasicTree:
         for value_index in range(len(values)-1):
             thresholds[value_index] = values[value_index] + (values[value_index+1] - values[value_index])/2
 
+        # Calculate total entropy
+
+        total_entropy = self.calc_info(data, classes)
+
         # Find the lower and upper dataset
 
         gain = np.zeros(len(thresholds))
         for threshold_index, threshold in enumerate(thresholds):
             entropy = 0
-            lower_data = []
-            lower_classes = []
-            upper_data = []
-            upper_classes = []
 
-            for data_index, datapoint in enumerate(data):
-                if datapoint[feature] <= threshold:
-                    lower_data.append(datapoint)
-                    lower_classes.append(classes[data_index])
-                elif datapoint[feature] > threshold:
-                    upper_data.append(datapoint)
-                    upper_classes.append(classes[data_index])
+            # Split the data for each threshold
 
-            # Calculate total entropy
+            lower_data, lower_classes, upper_data, upper_classes = self.split_data_cont(
+                data, classes, threshold, feature)
 
-            total_entropy = self.calc_info(data, classes)
             entropy += float(len(lower_data))/float(n_data)*self.calc_info(lower_data, lower_classes)
             entropy += float(len(upper_data))/float(n_data)*self.calc_info(upper_data, upper_classes)
 
@@ -168,27 +229,28 @@ class BasicTree:
 
             # Find the feature with the greatest information gain
 
-    def split_data_cont(self, data, classes, threshold, feature):
+    @staticmethod
+    def split_data_cont(data, classes, threshold, feature_index):
         """
-        Splits the dataset according to the provided threshold
+        Splits the data object according to the provided threshold of a selected attribute
 
-        :param data:
-        :param classes:
-        :param threshold:
-        :param feature:
-        :return:
+        :param data: Dataset containing examples
+        :param classes: Classes of the examples in a dataset
+        :param threshold: Threshold according to which the split is made
+        :param feature_index: Feature according to which the split is made
+        :return: Returns lower and upper data and corresponding classes
         """
 
-        lower_data = []
+        lower_data= []
         lower_classes = []
         upper_data = []
-        upper_classes =[]
+        upper_classes = []
 
         for data_index, datapoint in enumerate(data):
-                if datapoint[feature] <= threshold:
+                if datapoint[feature_index] <= threshold:
                     lower_data.append(datapoint)
                     lower_classes.append(classes[data_index])
-                elif datapoint[feature] > threshold:
+                elif datapoint[feature_index] > threshold:
                     upper_data.append(datapoint)
                     upper_classes.append(classes[data_index])
 
@@ -209,19 +271,13 @@ class BasicTree:
         number_of_features = len(feature_names)
         number_of_data = len(data)
 
-        # Finding possible classes
+        # Calculate the total entropy and a frequency of each class value in the current data set
 
-        class_values = []
-        for aclass in classes:
-            if class_values.count(aclass) == 0:
-                class_values.append(aclass)
+        class_counter = Counter(classes)
+        class_values = class_counter.keys()
+        frequency = class_counter.values()
+        total_entropy = reduce(lambda x, y: x + self.calc_entropy(float(y)/float(number_of_data)),  frequency, 0)
 
-        # Calculate total entropy
-        frequency = np.zeros(len(class_values))
-        total_entropy = 0
-        for class_index, aclass in enumerate(class_values):
-            frequency[class_index] = classes.count(aclass)
-            total_entropy += self.calc_entropy(float(classes.count(aclass))/float(number_of_data))
 
         # If the dataset contains points of only a single class, we reached the leaf (return the class)
 
@@ -238,12 +294,18 @@ class BasicTree:
             gain = -1
             best_feature_index = -1
             for feature_index in range(number_of_features):
+
+                # For non-numerical values find the maximum gain when splitting on a certain feature
+
                 if feature_types[feature_index] == 'NotNumerical':
                     local_gain = self.calc_info_gain(data, classes, feature_index)
                     if local_gain > gain:
                         gain = local_gain
                         best_feature_index = feature_index
                 else:
+
+                    # For numerical values find the maximum gain and threshold for splitting the data set
+
                     gain_list, thresholds_list = self.calc_info_gain_cont(data, classes, feature_index)
                     th_index = np.argmax(gain_list)
                     if gain_list[th_index] > gain:
@@ -255,15 +317,16 @@ class BasicTree:
             tree = {feature_names[best_feature_index]:{}}
             values = []
 
-            # Take the datapoints that the feature value with the greatest information gain takes
-
-            for datapoint in data:
-                if values.count(datapoint[best_feature_index]) == 0:
-                    values.append(datapoint[best_feature_index])
-
             # For each value of the selected feature remove the feature from the dataset and create a subtree
 
             if feature_types[best_feature_index] == 'NotNumerical':
+
+                # Take the datapoints that the feature value with the greatest information gain takes
+
+                for datapoint in data:
+                    if values.count(datapoint[best_feature_index]) == 0:
+                        values.append(datapoint[best_feature_index])
+
                 for value in values:
                     new_data = []
                     new_classes = []
@@ -334,3 +397,37 @@ class BasicTree:
             return tree
 
         return data_class
+
+    def classify_set(self, tree, data, feature_names):
+        """
+        Classifies a data set using the provided tree dictionary
+
+        :param tree:
+        :param data:
+        :param feature_names:
+        :return:
+        """
+
+        classes = []
+        for datapoint in data:
+            classes.append(self.classify(tree, datapoint, feature_names))
+
+        return classes
+
+    def tree_test(self, tree, test_data, test_classes, feature_names):
+        """
+        Test the decision tree using the test data and print the statistics
+
+        :param tree:
+        :param test_data:
+        :param test_classes:
+        :param feature_names:
+        :return:
+        """
+
+        result_classes = []
+        result_classes = self.classify_set(tree, test_data, feature_names)
+
+        true_results = [x == y for (x, y) in zip(result_classes, test_classes)]
+
+        return float(sum(true_results))/float(len(test_classes))
