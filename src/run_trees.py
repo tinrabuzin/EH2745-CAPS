@@ -1,25 +1,25 @@
 import ml_algorithms
-import matplotlib.pyplot as plt
-import random
 
 
 if True:
     tree = ml_algorithms.BasicTree()
     data, classes, feature_names = tree.read_data('/Users/tinrabuzin/dev/EH2745-CAPS/src/datasets/dataset.csv')
-    feature_types = ['Numeric', 'Numeric']
 
     training_data, training_classes, test_data, test_classes = tree.create_training_test_sets(data, classes, 0.6)
 
-    #x = [point[0] for point in dataset]
-    #y = [point[1] for point in dataset]
-    #plt.scatter(x, y, s=20, c = classes)
-    #plt.gray()
-    #plt.draw()
-    #plt.show()
+    # x = [point[0] for point in training_data]
+    # y = [point[1] for point in training_data]
+    # plt.scatter(x, y, s=20, c = training_classes)
+    # plt.gray()
+    # plt.draw()
+    # plt.show()
 
-    made_tree = tree.make_tree(training_data, training_classes, feature_names, feature_types)
+    made_tree = tree.make_tree(training_data, training_classes, feature_names)
     tree.print_tree(made_tree)
-    perc = tree.tree_test(made_tree, test_data, test_classes, feature_names)
+    print tree.classify(made_tree, [60,10], feature_names)
+    perc, result_classes = tree.tree_test(made_tree, test_data, test_classes, feature_names)
+    tree.plot_results(training_data, training_classes, test_data, test_classes, result_classes)
+
     print perc
 
 
