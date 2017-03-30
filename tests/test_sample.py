@@ -1,7 +1,8 @@
 import unittest
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                '../src')))
 from ml_algorithms import dtree
 
 
@@ -15,5 +16,5 @@ class AlgorithmsTestCases(unittest.TestCase):
         self.assertEqual(self.tree.calc_entropy(1), 0)
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     unittest.main()

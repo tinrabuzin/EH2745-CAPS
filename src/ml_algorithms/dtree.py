@@ -16,7 +16,8 @@ class BasicTree:
     @staticmethod
     def read_data(file_name):
         """
-        Reads the data from a *.csv file and stores it in the data objects. Also, returns the read information.
+        Reads the data from a *.csv file and stores it in the data objects.
+        Also, returns the read information.
 
         :param file_name: Path to the dataset
         :returns data: The data read from a file (values of the attributes)
@@ -53,7 +54,8 @@ class BasicTree:
         :return:
         """
 
-        training_indices = random.sample(range(len(data)), int(percentage*len(data)))
+        training_indices = random.sample(range(len(data)), int(percentage *
+                                                               len(data)))
         test_indices = []
         for index in range(len(data)):
             if training_indices.count(index) == 0:
@@ -72,8 +74,6 @@ class BasicTree:
             test_data.append(data[index])
             test_classes.append(classes[index])
 
-
-
         return training_data, training_classes, test_data, test_classes
 
     @staticmethod
@@ -88,7 +88,7 @@ class BasicTree:
         :return H: Returns the calculated entropy :math:`\\mathrm{H}(s)`
         """
         if p != 0:
-            return -p*np.log2(p)
+            return -p * np.log2(p)
         else:
             return 0
 
@@ -115,7 +115,7 @@ class BasicTree:
                 class_values.append(value)
 
         for class_value in classes:
-            info += self.calc_entropy(float(classes.count(class_value))/float(number_of_data))
+            info += self.calc_entropy(float(classes.count(class_value)) / float(number_of_data))
 
         return info
 
@@ -149,9 +149,10 @@ class BasicTree:
 
         # Create thresholds in the middle of the data
 
-        thresholds = np.zeros(len(values)-1)
-        for value_index in range(len(values)-1):
-            thresholds[value_index] = values[value_index] + (values[value_index+1] - values[value_index])/2
+        thresholds = np.zeros(len(values) - 1)
+        for value_index in range(len(values) - 1):
+            thresholds[value_index] = values[value_index] + \
+                (values[value_index + 1] - values[value_index]) / 2
 
         # Calculate total entropy
 
@@ -168,8 +169,10 @@ class BasicTree:
             lower_data, lower_classes, upper_data, upper_classes = self.split_data(
                 data, classes, threshold, feature)
 
-            entropy += float(len(lower_data))/float(n_data)*self.calc_info(lower_data, lower_classes)
-            entropy += float(len(upper_data))/float(n_data)*self.calc_info(upper_data, upper_classes)
+            entropy += float(len(lower_data)) / float(n_data) * \
+                self.calc_info(lower_data, lower_classes)
+            entropy += float(len(upper_data)) / float(n_data) * \
+                self.calc_info(upper_data, upper_classes)
 
             # Calculate total gain
 
@@ -189,18 +192,18 @@ class BasicTree:
         :return: Returns lower and upper data and corresponding classes
         """
 
-        lower_data= []
+        lower_data = []
         lower_classes = []
         upper_data = []
         upper_classes = []
 
         for data_index, datapoint in enumerate(data):
-                if datapoint[feature_index] <= threshold:
-                    lower_data.append(datapoint)
-                    lower_classes.append(classes[data_index])
-                elif datapoint[feature_index] > threshold:
-                    upper_data.append(datapoint)
-                    upper_classes.append(classes[data_index])
+            if datapoint[feature_index] <= threshold:
+                lower_data.append(datapoint)
+                lower_classes.append(classes[data_index])
+            elif datapoint[feature_index] > threshold:
+                upper_data.append(datapoint)
+                upper_classes.append(classes[data_index])
 
         return lower_data, lower_classes, upper_data, upper_classes
 
@@ -224,9 +227,11 @@ class BasicTree:
         class_counter = Counter(classes)
         class_values = class_counter.keys()
         frequency = class_counter.values()
-        total_entropy = reduce(lambda x, y: x + self.calc_entropy(float(y)/float(number_of_data)),  frequency, 0)
+        total_entropy = reduce(lambda x, y: x + self.calc_entropy(
+            float(y) / float(number_of_data)),  frequency, 0)
 
-        # If the dataset contains points of only a single class, we reached the leaf (return the class)
+        # If the dataset contains points of only a single class, we reached the
+        # leaf (return the class)
 
         if classes.count(classes[0]) == number_of_data:
             return classes[0]
@@ -249,7 +254,7 @@ class BasicTree:
                     threshold = thresholds_list[th_index]
                     best_feature_index = feature_index
 
-            tree = {feature_names[best_feature_index]:{}}
+            tree = {feature_names[best_feature_index]: {}}
 
             lower_data, lower_classes, upper_data, upper_classes = self.split_data(
                 data, classes, threshold, best_feature_index)
@@ -274,13 +279,13 @@ class BasicTree:
             for key in tree.keys():
                 if key == '<=':
                     print ind, "|", key, str(tree[key][0])
-                    self.print_tree(tree[key][1], ind+"\t")
+                    self.print_tree(tree[key][1], ind + "\t")
                 elif key == '>':
                     print ind, "|", key, str(tree[key][0])
-                    self.print_tree(tree[key][1], ind+"\t")
+                    self.print_tree(tree[key][1], ind + "\t")
                 else:
                     print ind, "|", key
-                    self.print_tree(tree[key], ind+"\t")
+                    self.print_tree(tree[key], ind + "\t")
         else:
             print ind, "->", tree
 
@@ -316,7 +321,7 @@ class BasicTree:
                 colors.append('#59d286')
             else:
                 colors.append('#fe6447')
-        plt.scatter(x, y, marker= 'x', s=40, c=colors)
+        plt.scatter(x, y, marker='x', s=40, c=colors)
         plt.draw()
         plt.show()
 
@@ -373,4 +378,4 @@ class BasicTree:
 
         true_results = [x == y for (x, y) in zip(result_classes, test_classes)]
 
-        return float(sum(true_results))/float(len(test_classes)), result_classes
+        return float(sum(true_results)) / float(len(test_classes)), result_classes
