@@ -106,16 +106,10 @@ class BasicTree:
         """
 
         number_of_data = len(data)
-
-        info = 0
-
-        class_values = []
-        for value in classes:
-            if class_values.count(value) == 0:
-                class_values.append(value)
-
-        for class_value in classes:
-            info += self.calc_entropy(float(classes.count(class_value)) / float(number_of_data))
+        class_counter = Counter(classes)
+        frequency = class_counter.values()
+        info = reduce(lambda x, y: x + self.calc_entropy(
+            float(y) / float(number_of_data)),  frequency, 0)
 
         return info
 
@@ -222,13 +216,10 @@ class BasicTree:
         number_of_features = len(feature_names)
         number_of_data = len(data)
 
-        # Calculate the total entropy and a frequency of each class value in the current data set
+        # Calculate the frequency of each class value in the current data set
 
         class_counter = Counter(classes)
-        class_values = class_counter.keys()
         frequency = class_counter.values()
-        total_entropy = reduce(lambda x, y: x + self.calc_entropy(
-            float(y) / float(number_of_data)),  frequency, 0)
 
         # If the dataset contains points of only a single class, we reached the
         # leaf (return the class)
