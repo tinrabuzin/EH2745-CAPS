@@ -45,37 +45,6 @@ class BasicTree:
         return data, classes, feature_names
 
     @staticmethod
-    def create_training_test_sets(data, classes, percentage):
-        """
-        Splits the data set into training and test sets
-
-        :param data:
-        :param classes:
-        :return:
-        """
-
-        training_indices = random.sample(range(len(data)), int(percentage *
-                                                               len(data)))
-        test_indices = []
-        for index in range(len(data)):
-            if training_indices.count(index) == 0:
-                test_indices.append(index)
-
-        training_data = []
-        training_classes = []
-        test_data = []
-        test_classes = []
-
-        for index in training_indices:
-            training_data.append(data[index])
-            training_classes.append(classes[index])
-
-        for index in test_indices:
-            test_data.append(data[index])
-            test_classes.append(classes[index])
-
-        return training_data, training_classes, test_data, test_classes
-
     @staticmethod
     def calc_entropy(p):
         """
