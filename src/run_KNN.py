@@ -1,105 +1,53 @@
 import ml_algorithms
+import numpy as np
 import matplotlib.pyplot as plt
 
-# =============================================================================================
-"""
-This run_KNN scripti imports data from "dataset.csv", calculates the prediction
-accuracy for all different vlaues of k and prints the results.
+file_name = '/Users/tinrabuzin/dev/EH2745-CAPS/src/datasets/dataset.csv'
 
-In the initailization part we can choose to normalize the data and the value of k that we want to test.
-The three most accurate k's are printed out and all k's are plotted.
-"""
-
-# =============================================================================================
-#					Part 0 - Initialize choices
-# =============================================================================================
-
-# within the method "correct_classes_for_k" you can normalize the X-vules if norm=1
-norm = 1
-# choice of number of tested k's
-k = 3
-# =============================================================================================
-#					Part I - IMPORT DATA
-# =============================================================================================
-
-# define column names
-file_name = '/Users/marnil3/Documents/Python Scripts/EH2745-CAPS-master/EH2745-CAPS-master/src/datasets/dataset.csv'
-
-# loading training data, using the method Tin created, however I changed from map to list (data2)
+# Load the data set from a file
 data_obj = ml_algorithms.Data(file_name)
-data, classes, feature_names = data_obj.read_data(file_name)
+data, classes, feature_names = data_obj.read_data()
 
-# Test with less data len(data)
-end_data = len(data)
-data = data[:end_data]
-classes = classes[:end_data]
+# Normalise the data
+if False:
+    data = data_obj.normalize(data)
 
+# Splitting the data into training and test data
+training_data, training_classes, test_data, test_classes = data_obj.create_training_test_sets(
+    data, classes, 0.7)
 
-# =============================================================================================
-#					Part II - calculate the accuracy for all values of k
-# =============================================================================================
-#   1. Normalize data
-#   2a. Calculate distances for all objects
-#   2b. Predict class for all objects depending on NN
-#   3. Do 2a and b for all values of k and calculate amount of correct classes
-#   4. Find the best predictions
+# Instantiate the k-NN object
+knn = ml_algorithms.KNN()
 
-#   1. Normalize the data by substracting mean and devide by std
-if norm == 1:
-    data = normalize(data)
+# Iterate through different numbers of k and estimate classification accuracy for the test set
+k_dict = {}
+for k in [3, 6, 9, 11, 13]:
+    print "----- Classifying for k = %d -----" % (k)
 
-DISTANCES = []
-DATA2 = []
-#   2a. Calculate distances
-for i in range(len(data)):
-    # get one object (o_i) and
-    o_i, data2 = KNN.split_data(data, i)
-    distances = KNN.calc_distances(data2, o_i)
-    DISTANCES.append(distances)
-    DATA2.append(data2)
+    est_classes = []
+    for index in range(len(test_data)):
+        distances = knn.neighbours_distance(training_data, test_data[index])
+        est_classes.append(knn.classify(3, distances, training_classes))
 
-# create a list of odd k-values
-K = list(range(3, k, 2))
+    # Calculate the accuracy
+    correct_num = np.sum(np.array(est_classes) == np.array(test_classes))
+    k_dict[k] = float(correct_num) / len(test_classes)
+    print "Accuracy is: %d" % (k_dict[k])
+    k_dict_sort = sorted(k_dict.iteritems(), key=lambda (k, v): (v, k))
 
-# lists to store results
-correct_for_K = []
-corr_plot_percent = []
-corr_plot_K = []
-
-#   3. Calculate the accuracy for all k-values
-for k in K:
-    # store predictions for each k-value
-    Y_pred = []
-    #   2b. Classify all objects
-    for i in range(len(data)):
-        class_pred = KNN.classify_KNN(DISTANCES[i], DATA2[i], k)
-        Y_pred.append(class_pred)
-
-    correct_classes_for_k = KNN.calc_correct(data, Y_pred)
-
-    # Store values
-    correct_for_K.append([correct_classes_for_k, k])
-    corr_plot_percent.append([correct_classes_for_k])
-    corr_plot_K.append([k])
-
-#   4. Find the best k-values
-correct_for_K_sorted = sorted(correct_for_K)
-
-# =============================================================================================
-#					Part III - print and plot the results
-# =============================================================================================
-
-# print the best three k values
-print ("The best accuracy is:           ",
-       correct_for_K_sorted[-1][0], ",achieved with k:", correct_for_K_sorted[-1][1])
-print ("The second accuracy is:         ",
-       correct_for_K_sorted[-2][0], ",achieved with k:", correct_for_K_sorted[-2][1])
-print ("The third accuracy is:          ",
-       correct_for_K_sorted[-3][0], ",achieved with k::", correct_for_K_sorted[-3][1])
+# Print the best three k values
+print ("The best accuracy is: ",
+       k_dict_sort[0][1], ",achieved with k - ", k_dict_sort[0][0])
+print ("The second best accuracy is:         ",
+       k_dict_sort[1][1], ",achieved with k -", k_dict_sort[1][0])
+print ("The third best accuracy is:          ",
+       k_dict_sort[2][1], ",achieved with k -", k_dict_sort[2][0])
 
 
-# plot accuracy and and k values
-plt.plot(corr_plot_K, corr_plot_percent)
-plt.xlabel('Number of Neighbors K')
-plt.ylabel('Accuracy')
+# Plot accuracy vs number of neighbours
+
+fig, ax = plt.subplots()
+ax.scatter(k_dict.keys(), k_dict.values())
+ax.set_xlabel('Number of Neighbors K')
+ax.set_ylabel('Accuracy')
 plt.show()

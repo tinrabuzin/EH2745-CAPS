@@ -45,7 +45,6 @@ class BasicTree:
         return data, classes, feature_names
 
     @staticmethod
-    @staticmethod
     def calc_entropy(p):
         """
         Calculates entropy from the provided probability

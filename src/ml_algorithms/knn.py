@@ -19,7 +19,7 @@ class KNN:
         :param y: Attributes of the data point y
         :return d: Euclidean distance between the two points
         """
-        d = np.sqrt(np.sum(np.square(x - y)))
+        d = np.sqrt(np.sum(np.square(np.array(x) - np.array(y))))
         return d
 
     def neighbours_distance(self, data, point):
@@ -44,7 +44,7 @@ class KNN:
 
         return distances
 
-    def classify(self, k, distances, data, classes):
+    def classify(self, k, distances, classes):
         """
         Classifies the object (o_i) depending on k-value
 
@@ -52,7 +52,6 @@ class KNN:
             -> most NN classies gives the class (k/2+1)
 
         :param distances (from o_i):
-        :param data (data_train):
         :param k:
         :return: class prediction for k
         """
@@ -60,7 +59,7 @@ class KNN:
         # Classify data depending on k-NN
         class_votes = {}
         for i in range(k):
-            vote = classes[distances[1]]
+            vote = classes[distances[i][1]]
             if vote in class_votes:
                 class_votes[vote] += 1
             else:
@@ -69,24 +68,3 @@ class KNN:
 
         # Return most common target
         return sorted_votes[0][0]
-
-    def calc_correct(data, Y_pred):
-        """
-        Calculates the correct predicitons in percentage
-
-        .. math::
-            ->(correct)/tot
-
-        :param data:
-        :param Y_pred:
-        :return: correct amount in percenatge
-        """
-        correct = 0
-
-        for i in range(len(data)):
-            if Y_pred[i] == data[i][2]:
-                correct = correct + 1
-
-        correct_perc = correct / i
-
-        return correct_perc

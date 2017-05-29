@@ -9,13 +9,6 @@ if True:
     training_data, training_classes, test_data, test_classes = tree.create_training_test_sets(
         data, classes, 0.6)
 
-    # x = [point[0] for point in training_data]
-    # y = [point[1] for point in training_data]
-    # plt.scatter(x, y, s=20, c = training_classes)
-    # plt.gray()
-    # plt.draw()
-    # plt.show()
-
     made_tree = tree.make_tree(training_data, training_classes, feature_names)
     tree.print_tree(made_tree)
     print tree.classify(made_tree, [60, 10], feature_names)

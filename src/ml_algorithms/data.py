@@ -1,14 +1,16 @@
 import random
+import numpy as np
 
 
 class Data:
 
-    def __init__(self):
+    def __init__(self, file_name):
         """
         Constructor of a data object
         """
+        self.file_name = file_name
 
-    def read_data(self, file_name):
+    def read_data(self):
         """
         Reads the data from a *.csv file and stores it in the data objects.
         Also, returns the read information.
@@ -21,7 +23,7 @@ class Data:
         :returns feature_names: Names of the attributes describing examples
         """
 
-        fid = open(file_name, 'r')
+        fid = open(self.file_name, 'r')
         data = []
         classes = []
         feature_names = []
@@ -76,45 +78,19 @@ class Data:
 
     def normalize(self, data):
         """
-        Normalize X
+        Normalises the data set
 
         .. math::
             (X-\mu(X))/\sigma(X)
 
-        :param x1:
-        :param x2:
         :return: normalized X in data
         """
-        # initialize
-        X1 = 0
-        X2 = 0
-        tot = len(data)
-        data2 = []
-        # calculate mean
+
+        mu = np.mean(data, axis=0)
+        sigma = np.std(data, axis=0)
+        print mu
+        print sigma
         for n in range(len(data)):
-            x1 = float(data[n][0])
-            x2 = float(data[n][1])
-            X1 = X1 + x1
-            X2 = X2 + x2
+            data[n] = np.true_divide(data[n] - mu, sigma)
 
-        X1_mean = X1 / tot
-        X2_mean = X2 / tot
-
-        # caclulate std
-        for n in range(len(data)):
-            x1 = np.square(float(data[n][0]) - X1_mean)
-            x2 = np.square(float(data[n][1]) - X2_mean)
-            X1 = X1 + x1
-            X2 = X2 + x2
-
-            X1_std = np.sqrt(X1 / tot)
-            X2_std = np.sqrt(X2 / tot)
-
-        # normalize data
-        for n in range(len(data)):
-            x1 = (float(data[n][0]) - X1_mean) / X1_std
-            x2 = (float(data[n][1]) - X2_mean) / X2_std
-            cl = int(data[n][2])
-            data2.append([x1, x2, cl])
-
-        return data2
+        return data
