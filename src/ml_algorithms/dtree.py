@@ -13,36 +13,6 @@ class BasicTree:
         :return:
         """
 
-    @staticmethod
-    def read_data(file_name):
-        """
-        Reads the data from a *.csv file and stores it in the data objects.
-        Also, returns the read information.
-
-        :param file_name: Path to the dataset
-        :returns data: The data read from a file (values of the attributes)
-        :returns classes: The classes that each of the examples takes
-        :returns feature_names: Names of the attributes describing examples
-        """
-
-        fid = open(file_name, 'r')
-        data = []
-        classes = []
-        feature_names = []
-        for line_index, line in enumerate(fid.readlines()):
-            line = line.strip()
-            if line_index == 0:
-                feature_names = line.split(',')[:-1]
-            else:
-                data.append(map(float, line.split(',')[:-1]))
-                if float(line.split(',')[-1]) > 0:
-                    classes.append(1)
-                else:
-                    classes.append(0)
-
-        fid.close()
-
-        return data, classes, feature_names
 
     @staticmethod
     def calc_entropy(p):

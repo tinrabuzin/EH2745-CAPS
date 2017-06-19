@@ -1,33 +1,26 @@
 import ml_algorithms
 
 
-if True:
-    tree = ml_algorithms.BasicTree()
-    data, classes, feature_names = tree.read_data(
-        '/Users/tinrabuzin/dev/EH2745-CAPS/src/datasets/dataset.csv')
-
-    training_data, training_classes, test_data, test_classes = tree.create_training_test_sets(
-        data, classes, 0.6)
-
-    made_tree = tree.make_tree(training_data, training_classes, feature_names)
-    tree.print_tree(made_tree)
-    print tree.classify(made_tree, [60, 10], feature_names)
-    perc, result_classes = tree.tree_test(made_tree, test_data, test_classes, feature_names)
-    tree.plot_results(training_data, training_classes, test_data, test_classes, result_classes)
-
-    print perc
+file_name_data = '/Users/tinrabuzin/dev/EH2745-CAPS/src/datasets/dataset.csv'
+file_name_tcc = '/Users/tinrabuzin/dev/EH2745-CAPS/src/datasets/dataset_tcc.csv'
+data_obj = ml_algorithms.Data()
+data_obj.read_data(file_name_data)
+data_obj.read_tcc(file_name_tcc)
 
 
-else:
+training_data, training_classes, test_data, test_classes = data_obj.create_training_test_sets(
+    data_obj.data, data_obj.classes, 0.6)
 
-    dataset = [[10, 10], [30, 40], [60, 70], [80, 90], [20, 80], [30, 70], [70, 10], [90, 20]]
-    classes = [1, 1, 1, 1, 0, 0, 0, 0]
-    feature_names = ['f1', 'f2']
+tree = ml_algorithms.BasicTree()
 
-    dtree = ml_algorithms.BasicTree()
-    data = ml_algorithms.Data(dataset, classes, feature_names, ['NotNumeric', 'NotNumeric'])
+made_tree = tree.make_tree(training_data, training_classes, data_obj.feature_names)
 
-    constructed_tree = dtree.make_tree(dataset, classes, feature_names, [
-                                       'NotNumeric', 'NotNumeric'])
+tree.print_tree(made_tree)
 
-    dtree.print_tree(constructed_tree)
+print tree.classify(made_tree, [60, 10], data_obj.feature_names)
+
+perc, result_classes = tree.tree_test(made_tree, test_data, test_classes, data_obj.feature_names)
+print "Percentage of the correctly classified states is: %f" % perc
+
+tree.plot_results(training_data, training_classes, test_data, test_classes, result_classes)
+
