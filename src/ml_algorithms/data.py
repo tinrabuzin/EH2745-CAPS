@@ -4,13 +4,29 @@ import numpy as np
 
 class Data:
 
-    def __init__(self, file_name):
+    def __init__(self, data=np.array([]), classes=np.array([]), tcc=np.array([]), feature_names=np.array([])):
         """
         Constructor of a data object
         """
-        self.file_name = file_name
+        self.data = data
+        self.classes = classes
+        self.tcc = tcc
+        self.feature_names = feature_names
 
-    def read_data(self):
+    def read_tcc(self, file_name=None):
+
+        fid = open(file_name, 'r')
+        tcc = []
+        for line_index, line in enumerate(fid.readlines()):
+            if line_index != 0:
+                tcc.append([float(line.strip())])
+        fid.close()
+
+        self.tcc = np.array(tcc)
+
+        return self.tcc
+
+    def read_data(self, file_name):
         """
         Reads the data from a *.csv file and stores it in the data objects.
         Also, returns the read information.
@@ -23,7 +39,7 @@ class Data:
         :returns feature_names: Names of the attributes describing examples
         """
 
-        fid = open(self.file_name, 'r')
+        fid = open(file_name, 'r')
         data = []
         classes = []
         feature_names = []
@@ -39,9 +55,9 @@ class Data:
                     classes.append(0)
         fid.close()
 
-        self.data = data
-        self.classes = classes
-        self.feture_names = feature_names
+        self.data = np.array(data)
+        self.classes = np.array(classes)
+        self.feature_names = np.array(feature_names)
 
         return data, classes, feature_names
 
@@ -76,7 +92,7 @@ class Data:
 
         return self.training_data, self.training_classes, self.test_data, self.test_classes
 
-    def normalize(self, data):
+    def normalize(self):
         """
         Normalises the data set
 
@@ -86,11 +102,7 @@ class Data:
         :return: normalized X in data
         """
 
-        mu = np.mean(data, axis=0)
-        sigma = np.std(data, axis=0)
-        print mu
-        print sigma
-        for n in range(len(data)):
-            data[n] = np.true_divide(data[n] - mu, sigma)
+        self.data = (self.data - self.data.mean()) / self.data.var()
+        self.tcc = (self.tcc - self.tcc.mean()) / self.tcc.var()
 
-        return data
+        return self.data, self.tcc

@@ -6,9 +6,9 @@ class MultiLayerPerceptron():
         self.n_data = len(inputs)
         self.inputs = np.concatenate((inputs, -np.ones((self.n_data, 1))), axis=1)
         self.targets = targets
-        self.n_in = inputs.shape[1]
-        self.n_out = targets.shape[1]
-        self.n_hidden = n_hidden
+        self.n_in = inputs.shape[1]  # Number of attributes
+        self.n_out = targets.shape[1]  # Number of outputs
+        self.n_hidden = n_hidden  # Number of hidden neurons
         self.beta = beta
 
         self.weights1 = np.random.randn(self.n_in + 1, n_hidden) * 0.1 - 0.05
@@ -20,7 +20,7 @@ class MultiLayerPerceptron():
         for n in range(iterations):
 
             self.outputs = self.fwd(self.inputs)
-            error = 0.5 * sum((targets - self.outputs)**2)
+            error = 0.5 * sum((self.targets - self.outputs)**2)
             print("Iteration: " + str(n) + '\t' + "Error: " + str(error))
 
             deltao = (self.outputs - self.targets) * self.outputs * (1.0 - self.outputs)
@@ -38,6 +38,7 @@ class MultiLayerPerceptron():
 
     def fwd(self, inputs):
 
+        # If inputs are not the same as inputs stored in the nn object add column of ones
         if not np.array_equal(inputs, self.inputs):
             inputs = np.concatenate((inputs, -np.ones((len(inputs), 1))), axis=1)
 
@@ -57,66 +58,3 @@ class MultiLayerPerceptron():
         nn_outputs = np.where(self.fwd(inputs) > 0.5, 1, 0)
 
         return nn_outputs
-
-
-class PerceptronNetwork(object):
-    """Percepton Network implementation"""
-
-    def __init__(self, inputs, targets):
-        """
-        Constructur
-        """
-        self.n_data = len(inputs)
-        self.inputs = np.concatenate((inputs, -np.ones((self.n_data, 1))), axis=1)
-        self.targets = targets
-        self.n_in = inputs.shape[1]
-        self.n_out = targets.shape[1]
-        self.weights = np.random.randn(self.n_in + 1, self.n_out) * 0.1 - 0.05
-
-    def train(self, eta, iterations):
-        """
-        Trains the perceptron network
-
-        :param eta: Learning rate
-        :param iterations: Number of maximum iterations
-        """
-
-        for iteration in range(iterations):
-            print("Iteration: " + str(iteration + 1))
-            print("_____________")
-            print(" Weights:")
-            print(self.weights)
-
-            activations = self.fwd(self.inputs)
-            self.update_weights(activations, eta)
-            activations = self.fwd(self.inputs)
-            print("Final outputs are:")
-            print(activations)
-            if np.array_equal(activations, self.targets):
-                break
-
-    def fwd(self, inputs):
-        """
-        Calculates forward throug the  network to calculate outputs
-
-        :param inputs:
-        """
-
-        if not np.array_equal(inputs, self.inputs):
-            inputs = np.concatenate((inputs, -np.ones((len(inputs), 1))), axis=1)
-
-        activations = np.dot(inputs, self.weights)
-
-        return np.where(activations > 0, 1, 0)
-
-    def update_weights(self, activations, eta):
-        self.weights -= eta * np.dot(np.transpose(self.inputs), (activations - self.targets))
-
-
-if __name__ == "__main__":
-    inputs = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-    targets = np.array([[0], [0], [0], [1]])
-    pn = MultiLayerPerceptron(inputs, targets, 2, 1)
-    pn.train(0.25, 1000)
-    # print "FwdResults"
-    pn.confmat([[0, 0], [0, 1], [1, 0], [1, 1]], [[0], [1], [1], [0]])
